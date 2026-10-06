@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy | Predictive-Machine Guard</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="alternate icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-block">
+      <div class="brand-logo" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title-row">
+          <h1>Predictive-Machine Guard</h1>
+          <span class="version-pill">SCADA / ML-DL v2.0</span>
+        </div>
+        <p class="brand-subtitle">Data Governance, Telemetry Handling &amp; Privacy Specification</p>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="control-actions">
+        <button id="legalThemeToggleBtn" class="btn btn-secondary" title="Switch between Dark Mode and Light Mode">
+          <span class="theme-indicator"></span>
+          <span id="legalThemeLabel">Theme: Light</span>
+        </button>
+        <a href="index.html" class="btn btn-primary">Return to Telemetry Console</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="workspace-container legal-container">
+    <article class="panel-card legal-card">
+      <div class="panel-header">
+        <div>
+          <h2>Privacy Policy &amp; Telemetry Data Governance</h2>
+          <p>Effective Date: October 6, 2026 | Document ID: PMG-POL-01</p>
+        </div>
+        <span class="status-badge status-info">ACTIVE POLICY</span>
+      </div>
+
+      <div class="legal-body">
+        <section class="legal-section">
+          <h3>1. Scope of This Policy</h3>
+          <p>
+            This Privacy Policy governs how Predictive-Machine Guard processes, stores, and transmits industrial sensor telemetry, uploaded comma-separated value (CSV) datasets, and client browser preferences when you access this web application.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h3>2. Industrial Telemetry &amp; Uploaded CSV Datasets</h3>
+          <p>
+            When you upload a custom manufacturing CSV file via the CSV Ingestion Studio:
+          </p>
+          <ul class="diagnostic-list">
+            <li>Uploaded sensor records are parsed in volatile memory solely to execute missing-value imputation, Tukey 1.5xIQR outlier Winsorization, and model evaluation.</li>
+            <li>Uploaded custom datasets are not sold, shared with external third parties, or used to train third-party commercial foundation models.</li>
+            <li>You may export and download your processed dataset at any time using the Export CSV control.</li>
+          </ul>
+        </section>
+
+        <section class="legal-section">
+          <h3>3. Personal Data &amp; Account Information</h3>
+          <p>
+            Predictive-Machine Guard operates as a technical engineering and machine learning workbench. The application does not require user registration, does not collect names, email addresses, payment details, or geolocation coordinates, and does not embed third-party advertising trackers or behavioral analytics scripts.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h3>4. Local Browser Storage &amp; Cookies</h3>
+          <p>
+            This application does not set tracking cookies. A single client-side key (<code>pmg_theme</code>) is stored in your browser's <code>localStorage</code> to remember your display preference (`dark` or `light` mode) across sessions. You can clear this key at any time through your browser settings.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h3>5. Network Logs &amp; Security</h3>
+          <p>
+            Standard HTTP request metadata (request path, timestamp, and HTTP status code) is processed transiently to serve application assets and telemetry evaluation endpoints. All public deployments enforce Transport Layer Security (`HTTPS / TLS 1.3`) for data in transit.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h3>6. Contact &amp; Compliance Inquiries</h3>
+          <p>
+            For questions regarding telemetry data handling, dataset benchmarking, or academic/industrial compliance, please contact the Predictive-Machine Guard engineering maintainer via the repository or deployment administrator channel.
+          </p>
+        </section>
+      </div>
+    </article>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-left">
+      <span>Predictive-Machine Guard | Industrial Predictive Maintenance Telemetry &amp; ML/DL Diagnostics</span>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Telemetry Console</a>
+      <span class="footer-sep">|</span>
+      <a href="privacy.html" class="active-footer-link">Privacy Policy</a>
+      <span class="footer-sep">|</span>
+      <a href="terms.html">Terms &amp; Conditions</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const saved = localStorage.getItem("pmg_theme") || "dark";
+      const apply = (t) => {
+        localStorage.setItem("pmg_theme", t);
+        document.body.setAttribute("data-theme", t);
+        const lbl = document.getElementById("legalThemeLabel");
+        if (lbl) lbl.textContent = t === "light" ? "Theme: Dark" : "Theme: Light";
+      };
+      apply(saved);
+      const btn = document.getElementById("legalThemeToggleBtn");
+      if (btn) {
+        btn.addEventListener("click", () => {
+          const curr = document.body.getAttribute("data-theme") || "dark";
+          apply(curr === "dark" ? "light" : "dark");
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

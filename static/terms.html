@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms &amp; Conditions | Predictive-Machine Guard</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="alternate icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-block">
+      <div class="brand-logo" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title-row">
+          <h1>Predictive-Machine Guard</h1>
+          <span class="version-pill">SCADA / ML-DL v2.0</span>
+        </div>
+        <p class="brand-subtitle">Operational Terms, Engineering Disclaimers &amp; Usage Conditions</p>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="control-actions">
+        <button id="legalThemeToggleBtn" class="btn btn-secondary" title="Switch between Dark Mode and Light Mode">
+          <span class="theme-indicator"></span>
+          <span id="legalThemeLabel">Theme: Light</span>
+        </button>
+        <a href="index.html" class="btn btn-primary">Return to Telemetry Console</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="workspace-container legal-container">
+    <article class="panel-card legal-card">
+      <div class="panel-header">
+        <div>
+          <h2>Terms &amp; Conditions of Use</h2>
+          <p>Effective Date: October 6, 2026 | Document ID: PMG-TERMS-01</p>
+        </div>
+        <span class="status-badge status-info">ACTIVE TERMS</span>
+      </div>
+
+      <div class="legal-body">
+        <section class="legal-section">
+          <h3>1. Acceptance of Terms</h3>
+          <p>
+            By accessing or using Predictive-Machine Guard, including its Digital Twin simulation controls, 7-model machine learning and deep learning evaluation suite, TreeSHAP feature attribution modules, and telemetry ingestion tools, you agree to comply with these Terms and Conditions.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h3>2. Industrial Safety &amp; Decision-Support Disclaimer</h3>
+          <p>
+            Predictive-Machine Guard is a statistical and machine learning decision-support tool trained on historical and benchmark industrial telemetry datasets. All outputs, including Failure Probability percentages, Composite Health Index (`MHI`) readouts, Remaining Useful Life (`RUL`) estimates, and Counterfactual Parameter Setpoints:
+          </p>
+          <ul class="diagnostic-list">
+            <li>Are probabilistic estimates and do not constitute certified PLC safety interlocks or physical hardware protection systems.</li>
+            <li>Must not replace physical Lockout/Tagout (`LOTO`), emergency stop (`E-Stop`) circuitry, OEM operating manuals, or licensed plant engineering inspection prior to modifying physical machinery parameters.</li>
+          </ul>
+        </section>
+
+        <section class="legal-section">
+          <h3>3. Permitted Use &amp; Dataset Ingestion</h3>
+          <p>
+            You are permitted to use this platform for industrial telemetry analysis, model benchmarking, research, and educational demonstration. When uploading custom CSV files to the ingestion studio:
+          </p>
+          <ul class="diagnostic-list">
+            <li>You confirm that you have the right to process the uploaded sensor data.</li>
+            <li>You agree not to upload executable malware, malformed payloads, or unlawful content.</li>
+          </ul>
+        </section>
+
+        <section class="legal-section">
+          <h3>4. Benchmark Datasets &amp; Open Standards</h3>
+          <p>
+            The platform includes 12 industrial benchmark datasets modeled on open engineering specifications (including UCI AI4I 2020 Milling, NASA CMAPSS Turbofan, NASA IMS Bearing, UCI SECOM Semiconductor, and UCI Hydraulic Rig schemas). Benchmark metrics (`F1`, `ROC-AUC`, `PR-AUC`, `MCC`, `Brier Loss`, `RUL MAE/RMSE/R²`) are computed deterministically on held-out test splits (`20%`).
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h3>5. Limitation of Liability</h3>
+          <p>
+            The software and its predictive models are provided on an "as-is" and "as-available" basis without warranties of any kind, express or implied. In no event shall the authors or maintainers of Predictive-Machine Guard be liable for any direct, indirect, or consequential equipment damage, production downtime, or data loss arising from reliance on model predictions.
+          </p>
+        </section>
+      </div>
+    </article>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-left">
+      <span>Predictive-Machine Guard | Industrial Predictive Maintenance Telemetry &amp; ML/DL Diagnostics</span>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Telemetry Console</a>
+      <span class="footer-sep">|</span>
+      <a href="privacy.html">Privacy Policy</a>
+      <span class="footer-sep">|</span>
+      <a href="terms.html" class="active-footer-link">Terms &amp; Conditions</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const saved = localStorage.getItem("pmg_theme") || "dark";
+      const apply = (t) => {
+        localStorage.setItem("pmg_theme", t);
+        document.body.setAttribute("data-theme", t);
+        const lbl = document.getElementById("legalThemeLabel");
+        if (lbl) lbl.textContent = t === "light" ? "Theme: Dark" : "Theme: Light";
+      };
+      apply(saved);
+      const btn = document.getElementById("legalThemeToggleBtn");
+      if (btn) {
+        btn.addEventListener("click", () => {
+          const curr = document.body.getAttribute("data-theme") || "dark";
+          apply(curr === "dark" ? "light" : "dark");
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
