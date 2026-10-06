@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+cloudflared.exe
+models/
+data/
+ml_engine/
+app.py
+train_and_evaluate.py
+requirements.txt
+Dockerfile
+render.yaml
+.git/

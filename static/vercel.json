@@ -2,12 +2,8 @@
   "version": 2,
   "public": true,
   "cleanUrls": true,
-  "framework": null,
-  "buildCommand": "echo 'Static bundle ready'",
-  "outputDirectory": "static",
   "rewrites": [
     { "source": "/static/(.*)", "destination": "/$1" },
-    { "source": "/", "destination": "/index.html" },
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/terms", "destination": "/terms.html" }
   ]
