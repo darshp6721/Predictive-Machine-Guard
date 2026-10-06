@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Presentation | Predictive-Machine Guard</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="alternate icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .deck-wrapper {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 1.25rem 1.75rem 2.5rem;
+    }
+    .deck-nav-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 0.75rem 1.1rem;
+      margin-bottom: 1.1rem;
+    }
+    .slide-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .slide-tab-btn {
+      background: var(--bg-subcard);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .slide-tab-btn.active {
+      background: var(--cyan-glow);
+      color: var(--cyan);
+      border-color: var(--cyan);
+    }
+    .deck-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      padding: 0 0.5rem;
+    }
+    .slide-frame {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-top: 3px solid var(--cyan);
+      border-radius: 6px;
+      padding: 2rem 2.25rem;
+      min-height: 620px;
+      box-shadow: var(--shadow-card);
+    }
+    .slide-frame.active {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .slide-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--cyan);
+      background: var(--cyan-glow);
+      border: 1px solid var(--border-highlight);
+      padding: 0.2rem 0.65rem;
+      border-radius: 4px;
+      margin-bottom: 0.65rem;
+    }
+    .slide-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-heading);
+      line-height: 1.25;
+      margin-bottom: 0.35rem;
+    }
+    .slide-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    .slide-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .slide-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .slide-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .slide-box {
+      background: var(--bg-subcard);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 1.15rem 1.25rem;
+    }
+    .slide-box h3 {
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: var(--cyan);
+      margin-bottom: 0.65rem;
+    }
+    .slide-box ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: var(--text-primary);
+    }
+    .slide-box ul li::before {
+      content: "> ";
+      font-family: var(--font-mono);
+      color: var(--emerald);
+      font-weight: 700;
+    }
+    .arch-flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.35rem;
+    }
+    .arch-step {
+      background: var(--bg-subcard);
+      border: 1px solid var(--border-highlight);
+      border-radius: 5px;
+      padding: 0.85rem 0.95rem;
+    }
+    .arch-step-num {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 0.25rem;
+    }
+    .arch-step-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-heading);
+      margin-bottom: 0.3rem;
+    }
+    .arch-step-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+    .code-block {
+      background: #070b14;
+      border: 1px solid var(--border-subtle);
+      border-radius: 5px;
+      padding: 0.9rem 1.1rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.5;
+      color: #e2e8f0;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .code-header {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--cyan);
+      margin-bottom: 0.45rem;
+    }
+    .screenshot-card {
+      background: var(--bg-subcard);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .screenshot-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+    }
+    .screenshot-caption {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-heading);
+    }
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      margin-top: 1.25rem;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    @media (max-width: 1050px) {
+      .slide-grid-2, .slide-grid-3, .slide-grid-4, .arch-flow {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-block">
+      <div class="brand-logo" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title-row">
+          <h1>Predictive-Machine Guard</h1>
+        </div>
+        <p class="brand-subtitle">Faculty Project Presentation Deck (8 Sections)</p>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="control-actions">
+        <button id="fullscreenBtn" class="btn btn-secondary">Fullscreen Mode</button>
+        <a href="index.html" class="btn btn-primary">Open Live Telemetry App</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="deck-wrapper">
+    <div class="deck-nav-bar">
+      <div class="slide-tabs" id="slideTabBar">
+        <button class="slide-tab-btn active" data-slide="0">1. Title Page</button>
+        <button class="slide-tab-btn" data-slide="1">2. Introduction</button>
+        <button class="slide-tab-btn" data-slide="2">3. Objectives</button>
+        <button class="slide-tab-btn" data-slide="3">4. Tools Used</button>
+        <button class="slide-tab-btn" data-slide="4">5. System Design</button>
+        <button class="slide-tab-btn" data-slide="5">6. Program Code</button>
+        <button class="slide-tab-btn" data-slide="6">7. Output Screenshots</button>
+        <button class="slide-tab-btn" data-slide="7">8. Conclusion</button>
+      </div>
+      <div class="deck-controls">
+        <button id="prevSlideBtn" class="btn btn-secondary">Previous</button>
+        <span id="slideCounterText" class="slide-counter">1 / 8</span>
+        <button id="nextSlideBtn" class="btn btn-primary">Next</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 1: TITLE PAGE -->
+    <section class="slide-frame active" data-index="0">
+      <div>
+        <span class="slide-badge">SECTION 1 OF 8 | TITLE PAGE</span>
+        <h2 class="slide-title" style="font-size:2.4rem;margin-top:0.4rem;">Predictive-Machine Guard</h2>
+        <p class="slide-subtitle" style="font-size:1.1rem;color:var(--cyan);">
+          Applied Machine Learning &amp; PyTorch Deep Learning Platform for Multi-Domain Industrial Predictive Maintenance
+        </p>
+
+        <div class="slide-grid-4">
+          <div class="slide-box">
+            <h3>12 Industrial Datasets</h3>
+            <p style="font-family:var(--font-mono);font-size:1.3rem;font-weight:700;margin-bottom:0.3rem;">56,266 Rows</p>
+            <p style="font-size:0.82rem;color:var(--text-muted);">CNC Milling, Turbofan, Bearings, Pumps, Wind Turbines, Robotics, Semiconductors</p>
+          </div>
+          <div class="slide-box">
+            <h3>7 Unified Models</h3>
+            <p style="font-family:var(--font-mono);font-size:1.3rem;font-weight:700;margin-bottom:0.3rem;">4 ML + 3 DL</p>
+            <p style="font-size:0.82rem;color:var(--text-muted);">XGBoost, LightGBM, Random Forest, LogReg + PyTorch ANN, 1D-CNN, BiLSTM</p>
+          </div>
+          <div class="slide-box">
+            <h3>Explainable Diagnostics</h3>
+            <p style="font-family:var(--font-mono);font-size:1.3rem;font-weight:700;margin-bottom:0.3rem;">SHAP + RUL</p>
+            <p style="font-size:0.82rem;color:var(--text-muted);">Global &amp; Local TreeSHAP, Failure Mode Classification, and Remaining Useful Life</p>
+          </div>
+          <div class="slide-box">
+            <h3>Setpoint Optimization</h3>
+            <p style="font-family:var(--font-mono);font-size:1.3rem;font-weight:700;margin-bottom:0.3rem;">Risk Delta</p>
+            <p style="font-size:0.82rem;color:var(--text-muted);">Recommends exact RPM, Torque, and Thermal adjustments to prevent breakdown</p>
+          </div>
+        </div>
+
+        <div class="slide-box">
+          <h3>Project &amp; Deployment Details</h3>
+          <ul>
+            <li><strong>Developer</strong>: Darsh</li>
+            <li><strong>Live Production URL (Vercel CDN)</strong>: <a href="https://predictive-machine-guard.vercel.app" target="_blank" style="color:var(--cyan);">https://predictive-machine-guard.vercel.app</a></li>
+            <li><strong>Live Production URL (GitHub Pages)</strong>: <a href="https://darshp6721.github.io/Predictive-Machine-Guard/" target="_blank" style="color:var(--cyan);">https://darshp6721.github.io/Predictive-Machine-Guard/</a></li>
+            <li><strong>GitHub Source Repository</strong>: <a href="https://github.com/darshp6721/Predictive-Machine-Guard" target="_blank" style="color:var(--cyan);">https://github.com/darshp6721/Predictive-Machine-Guard</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Predictive-Machine Guard | Section 1: Title Page</span>
+        <span>Use Left / Right Arrow Keys to Navigate</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: INTRODUCTION -->
+    <section class="slide-frame" data-index="1">
+      <div>
+        <span class="slide-badge">SECTION 2 OF 8 | INTRODUCTION</span>
+        <h2 class="slide-title">2. Introduction</h2>
+        <p class="slide-subtitle">Industrial Problem Statement and Shift from Reactive Repairs to Predictive Telemetry</p>
+
+        <div class="slide-grid-2">
+          <div class="slide-box">
+            <h3>Problem Statement in Manufacturing</h3>
+            <ul>
+              <li>Unexpected equipment failures in CNC milling spindles, jet turbofans, centrifugal pumps, and transformers cause severe production halts and secondary mechanical damage.</li>
+              <li><strong>Reactive Maintenance (Run-to-Failure)</strong> waits until catastrophic breakdown occurs.</li>
+              <li><strong>Preventive Maintenance (Fixed-Schedule)</strong> replaces healthy parts too early while missing sudden thermal, electrical, or overstrain faults between inspections.</li>
+              <li>Raw industrial sensor streams contain missing values (3% to 5% dropouts), extreme electromagnetic interference (EMI) spikes, and severe class imbalance.</li>
+            </ul>
+          </div>
+          <div class="slide-box">
+            <h3>Proposed Solution: Predictive-Machine Guard</h3>
+            <ul>
+              <li>An end-to-end predictive maintenance console evaluated across <strong>12 industrial datasets (56,266 total records)</strong>.</li>
+              <li>Automates data cleaning using equipment-grade grouped median imputation and <strong>2.2x IQR Winsorization</strong> outlier capping.</li>
+              <li>Predicts 4 outputs simultaneously: <strong>Failure Probability (%)</strong>, <strong>Root-Cause Failure Mode</strong>, <strong>Remaining Useful Life (RUL)</strong>, and <strong>Equipment Health Index</strong>.</li>
+              <li>Includes an interactive parameter simulator that computes recommended RPM, Torque, and Cooling setpoints to actively lower failure risk.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="slide-box">
+          <h3>12 Industrial Benchmark Datasets Integrated (56,266 Total Telemetry Rows)</h3>
+          <div class="slide-grid-3" style="margin-bottom:0;">
+            <ul>
+              <li>1. UCI AI4I 2020 CNC Milling Machine</li>
+              <li>2. NASA CMAPSS Turbofan Jet Engine</li>
+              <li>3. CNC &amp; Robotic Vibro-Acoustic Plant</li>
+              <li>4. NASA IMS Bearing Vibration</li>
+            </ul>
+            <ul>
+              <li>5. UCI SECOM Semiconductor Wafer Etch</li>
+              <li>6. UCI Hydraulic Test Rig Monitoring</li>
+              <li>7. Centrifugal Pump Cavitation &amp; Seal</li>
+              <li>8. Wind Turbine Gearbox &amp; Generator</li>
+            </ul>
+            <ul>
+              <li>9. Steel Hot-Rolling Mill Stand</li>
+              <li>10. Robotic Spot-Welding &amp; Press Shop</li>
+              <li>11. EV Lithium-Ion Battery Cell Aging</li>
+              <li>12. Pharmaceutical Bioreactor</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Predictive-Machine Guard | Section 2: Introduction</span>
+        <span>Slide 2 of 8</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: OBJECTIVES -->
+    <section class="slide-frame" data-index="2">
+      <div>
+        <span class="slide-badge">SECTION 3 OF 8 | OBJECTIVES</span>
+        <h2 class="slide-title">3. Objectives</h2>
+        <p class="slide-subtitle">Core Data Engineering, Machine Learning, Deep Learning, and Operational Goals</p>
+
+        <div class="slide-grid-3">
+          <div class="slide-box">
+            <h3>1. Automated Data Cleaning</h3>
+            <ul>
+              <li>Remove duplicate sensor records automatically.</li>
+              <li>Impute missing sensor values using equipment-tier grouped medians with zero data leakage.</li>
+              <li>Audit outliers via 1.5x IQR and |Z| &gt; 3.0 rules, applying 2.2x IQR Winsorization clipping.</li>
+            </ul>
+          </div>
+          <div class="slide-box">
+            <h3>2. Physics Feature Engineering</h3>
+            <ul>
+              <li>Derive physical stress features from raw telemetry: Mechanical Power [W], Overstrain Index [Nm*min], Temp Diff [K], Thermal Ratio, and Torque per kRPM.</li>
+              <li>Expose non-linear electro-mechanical stress boundaries to classifiers.</li>
+            </ul>
+          </div>
+          <div class="slide-box">
+            <h3>3. 7-Model ML &amp; DL Suite</h3>
+            <ul>
+              <li>Benchmark 4 Classical ML models (XGBoost, LightGBM, Random Forest, Logistic Regression).</li>
+              <li>Train 3 custom PyTorch Deep Learning architectures (ANN, 1D-CNN, BiLSTM).</li>
+              <li>Balance minority fault classes on the 70% training split using SMOTE.</li>
+            </ul>
+          </div>
+          <div class="slide-box">
+            <h3>4. Multi-Task Diagnostics</h3>
+            <ul>
+              <li>Predict binary failure risk alongside specific multi-class failure modes (TWF, HDF, PWF, OSF).</li>
+              <li>Forecast continuous Remaining Useful Life (RUL in minutes/cycles) and composite Health Index (%).</li>
+            </ul>
+          </div>
+          <div class="slide-box">
+            <h3>5. Explainable AI &amp; Setpoints</h3>
+            <ul>
+              <li>Provide global and single-reading TreeSHAP feature attributions.</li>
+              <li>Calculate recommended setpoint adjustments with quantified Post-Tuning Risk Delta.</li>
+            </ul>
+          </div>
+          <div class="slide-box">
+            <h3>6. Cloud &amp; CSV Portability</h3>
+            <ul>
+              <li>Support drag-and-drop custom CSV import and cleaned CSV export directly in the browser.</li>
+              <li>Deploy 24/7 on global CDNs (Vercel &amp; GitHub Pages) with full Privacy and Terms compliance.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Predictive-Machine Guard | Section 3: Objectives</span>
+        <span>Slide 3 of 8</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: TOOLS USED -->
+    <section class="slide-frame" data-index="3">
+      <div>
+        <span class="slide-badge">SECTION 4 OF 8 | TOOLS USED</span>
+        <h2 class="slide-title">4. Tools Used</h2>
+        <p class="slide-subtitle">Programming Languages, Machine Learning &amp; Deep Learning Libraries, and Cloud Stack</p>
+
+        <div class="table-responsive">
+          <table class="benchmark-table">
+            <thead>
+              <tr>
+                <th>System Layer</th>
+                <th>Tools &amp; Libraries</th>
+                <th>Engineering Purpose in Predictive-Machine Guard</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong class="text-cyan">1. Backend &amp; API</strong></td>
+                <td style="font-family:var(--font-mono);">Python 3.11+, WSGI Server, REST JSON API</td>
+                <td>Executes model training pipelines, serves real-time predictions (<code>/api/predict</code>), and processes custom CSV uploads.</td>
+              </tr>
+              <tr>
+                <td><strong class="text-cyan">2. Classical ML</strong></td>
+                <td style="font-family:var(--font-mono);">Scikit-Learn, XGBoost, LightGBM, Imbalanced-Learn</td>
+                <td>Gradient boosted decision trees, Random Forest classification &amp; RUL regression, Logistic Regression, and SMOTE balancing.</td>
+              </tr>
+              <tr>
+                <td><strong class="text-cyan">3. Deep Learning</strong></td>
+                <td style="font-family:var(--font-mono);">PyTorch (torch.nn, DataLoader, AdamW, BCEWithLogitsLoss)</td>
+                <td>Custom neural architectures: Deep Multi-Layer Perceptron (ANN), 1D Convolutional Network (1D-CNN), and Bidirectional LSTM (BiLSTM).</td>
+              </tr>
+              <tr>
+                <td><strong class="text-cyan">4. Data &amp; Explainability</strong></td>
+                <td style="font-family:var(--font-mono);">Pandas, NumPy, SciPy, SHAP (TreeExplainer), Joblib</td>
+                <td>Grouped median missing value imputation, 2.2x IQR Winsorization, physics feature engineering, and TreeSHAP attributions.</td>
+              </tr>
+              <tr>
+                <td><strong class="text-cyan">5. Frontend Console</strong></td>
+                <td style="font-family:var(--font-mono);">HTML5 Canvas, CSS3 Grid, Vanilla ES6 JavaScript</td>
+                <td>Interactive parameter simulator, live telemetry stream, ROC &amp; epoch loss curves, and browser-native fallback engine.</td>
+              </tr>
+              <tr>
+                <td><strong class="text-cyan">6. Cloud Deployment</strong></td>
+                <td style="font-family:var(--font-mono);">Git, GitHub Actions, Vercel CDN, GitHub Pages</td>
+                <td>Permanent 24/7 global hosting on Vercel and GitHub Pages with automated deployment workflows.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Predictive-Machine Guard | Section 4: Tools Used</span>
+        <span>Slide 4 of 8</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: SYSTEM DESIGN -->
+    <section class="slide-frame" data-index="4">
+      <div>
+        <span class="slide-badge">SECTION 5 OF 8 | SYSTEM DESIGN</span>
+        <h2 class="slide-title">5. System Design</h2>
+        <p class="slide-subtitle">End-to-End 5-Stage Telemetry Processing, Model Training, and Decision Support Architecture</p>
+
+        <div class="arch-flow">
+          <div class="arch-step">
+            <div class="arch-step-num">STAGE 1</div>
+            <div class="arch-step-title">Data Ingestion</div>
+            <div class="arch-step-desc">12 Industrial Datasets (56,266 rows) + Custom CSV Auto-Schema Mapper</div>
+          </div>
+          <div class="arch-step">
+            <div class="arch-step-num">STAGE 2</div>
+            <div class="arch-step-title">Data Cleaning</div>
+            <div class="arch-step-desc">Duplicate Removal, Tier-Grouped Median Imputation, 2.2x IQR Winsorization</div>
+          </div>
+          <div class="arch-step">
+            <div class="arch-step-num">STAGE 3</div>
+            <div class="arch-step-title">Feature Engineering</div>
+            <div class="arch-step-desc">Physics Interaction Terms, 70/10/20 Stratified Split, SMOTE Balancing</div>
+          </div>
+          <div class="arch-step">
+            <div class="arch-step-num">STAGE 4</div>
+            <div class="arch-step-title">7-Model Training</div>
+            <div class="arch-step-desc">4 Classical ML + 3 PyTorch DL Models + Multi-Class Mode &amp; RUL Regressors</div>
+          </div>
+          <div class="arch-step">
+            <div class="arch-step-num">STAGE 5</div>
+            <div class="arch-step-title">SCADA &amp; Setpoints</div>
+            <div class="arch-step-desc">Real-Time Simulator, TreeSHAP Drivers, and Recommended Setpoint Adjustments</div>
+          </div>
+        </div>
+
+        <div class="slide-grid-2">
+          <div class="slide-box">
+            <h3>Mathematical Pipeline &amp; Feature Formulations</h3>
+            <ul>
+              <li><strong>Outlier Winsorization</strong>: Sensor spikes outside <code>[Q25 - 2.2*IQR, Q75 + 2.2*IQR]</code> are capped to prevent EMI distortion while preserving genuine fault boundaries.</li>
+              <li><strong>Mechanical Power [W]</strong>: <code>P = Torque * (2 * pi * RPM / 60)</code> captures spindle and shaft load.</li>
+              <li><strong>Overstrain Index [Nm*min]</strong>: <code>ToolWear * Torque</code> models cumulative mechanical fatigue.</li>
+              <li><strong>Thermal Gradient [K]</strong>: <code>ProcessTemp - AirTemp</code> isolates heat dissipation efficiency.</li>
+            </ul>
+          </div>
+          <div class="slide-box">
+            <h3>Hybrid Inference &amp; Cloud Execution</h3>
+            <ul>
+              <li><strong>Stratified Evaluation</strong>: 70% Train, 10% Validation, and 20% Held-Out Test split; SMOTE is applied strictly inside the training split.</li>
+              <li><strong>Multi-Metric Validation</strong>: Evaluated using F1-Score, ROC-AUC, PR-AUC, Recall, Precision, Matthews Correlation Coefficient (MCC), and Brier Loss.</li>
+              <li><strong>Setpoint Recommendation Engine</strong>: Perturbs controllable inputs toward safe operating medians and calculates the resulting <strong>Risk Change (%)</strong>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Predictive-Machine Guard | Section 5: System Design</span>
+        <span>Slide 5 of 8</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: PROGRAM CODE -->
+    <section class="slide-frame" data-index="5">
+      <div>
+        <span class="slide-badge">SECTION 6 OF 8 | PROGRAM CODE</span>
+        <h2 class="slide-title">6. Program Code</h2>
+        <p class="slide-subtitle">Core Production Code Excerpts from ml_engine/preprocessing.py, ml_engine/deep_learning.py, and ml_engine/pipeline.py</p>
+
+        <div class="slide-grid-2">
+          <div>
+            <div class="code-header">1. Data Cleaning &amp; IQR Winsorization (ml_engine/preprocessing.py)</div>
+            <pre class="code-block">class DataQualityPreprocessor:
+    def __init__(self, iqr_multiplier: float = 2.2) -> None:
+        self.iqr_multiplier = iqr_multiplier
+        self.fences, self.medians = {}, {}
+
+    def fit_transform(self, df: pd.DataFrame, sensor_cols: List[str]):
+        work = df.drop_duplicates().reset_index(drop=True)
+        for col in sensor_cols:
+            raw = pd.to_numeric(work[col], errors="coerce")
+            median_val = float(raw.dropna().median())
+            self.medians[col] = median_val
+            # Grouped median imputation by equipment grade
+            if "Type" in work.columns and raw.isna().sum() > 0:
+                imputed = raw.fillna(
+                    work.groupby("Type")[col].transform("median")
+                ).fillna(median_val)
+            else:
+                imputed = raw.fillna(median_val)
+            # 2.2x IQR Winsorization outlier capping
+            q25, q75 = float(imputed.quantile(0.25)), float(imputed.quantile(0.75))
+            iqr = max(q75 - q25, 1e-6)
+            win_low = q25 - self.iqr_multiplier * iqr
+            win_high = q75 + self.iqr_multiplier * iqr
+            work[col] = np.round(imputed.clip(win_low, win_high), 3)
+        return work</pre>
+          </div>
+
+          <div>
+            <div class="code-header">2. PyTorch 1D-CNN &amp; 7-Model Suite (ml_engine/deep_learning.py &amp; pipeline.py)</div>
+            <pre class="code-block">class _Conv1DCNNNet(nn.Module):
+    def __init__(self, in_features: int) -> None:
+        super().__init__()
+        self.conv_block = nn.Sequential(
+            nn.Conv1d(1, 16, kernel_size=3, padding=1),
+            nn.BatchNorm1d(16), nn.ReLU(),
+            nn.Conv1d(16, 32, kernel_size=3, padding=1),
+            nn.BatchNorm1d(32), nn.ReLU(),
+        )
+        self.head = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(32 * in_features, 32),
+            nn.ReLU(), nn.Dropout(0.15),
+            nn.Linear(32, 1),
+        )
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.head(self.conv_block(x.unsqueeze(1))).squeeze(-1)
+
+# 7-Model Unified Benchmark Suite (ml_engine/pipeline.py)
+candidate_models = {
+    "XGBoost": XGBClassifier(n_estimators=180, max_depth=5, learning_rate=0.07),
+    "LightGBM": LGBMClassifier(n_estimators=180, num_leaves=31, learning_rate=0.07),
+    "Random Forest": RandomForestClassifier(n_estimators=180, max_depth=12),
+    "Logistic Regression": Pipeline([("scaler", StandardScaler()), ("clf", LogisticRegression())]),
+    "ANN (Deep MLP)": DeepLearningClassifierWrapper(arch="ANN", epochs=18),
+    "1D-CNN": DeepLearningClassifierWrapper(arch="1D-CNN", epochs=18),
+    "BiLSTM": DeepLearningClassifierWrapper(arch="BiLSTM", epochs=16),
+}</pre>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Predictive-Machine Guard | Section 6: Program Code</span>
+        <span>Slide 6 of 8</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: OUTPUT SCREENSHOTS -->
+    <section class="slide-frame" data-index="6">
+      <div>
+        <span class="slide-badge">SECTION 7 OF 8 | OUTPUT SCREENSHOTS</span>
+        <h2 class="slide-title">7. Output Screenshots</h2>
+        <p class="slide-subtitle">Live Application Captures Across All 4 Workspace Tabs (Click Any Link to Open Live View)</p>
+
+        <div class="slide-grid-2">
+          <div class="screenshot-card">
+            <div class="screenshot-caption">
+              <span>1. Overview &amp; Parameter Simulator</span>
+              <a href="index.html?tab=tab-twin" target="_blank" class="btn-link">Open Live Tab</a>
+            </div>
+            <img src="slides/output_1_telemetry_kpis.png" alt="Overview and Simulator Screenshot" />
+          </div>
+          <div class="screenshot-card">
+            <div class="screenshot-caption">
+              <span>2. 7-Model Comparison, ROC &amp; PyTorch Loss Curves</span>
+              <a href="index.html?tab=tab-models" target="_blank" class="btn-link">Open Live Tab</a>
+            </div>
+            <img src="slides/output_2_models_prescriptions.png" alt="Model Comparison Screenshot" />
+          </div>
+          <div class="screenshot-card">
+            <div class="screenshot-caption">
+              <span>3. Global &amp; Local SHAP Feature Importance</span>
+              <a href="index.html?tab=tab-xai" target="_blank" class="btn-link">Open Live Tab</a>
+            </div>
+            <img src="slides/output_3_preprocessing_shap.png" alt="Feature Importance Screenshot" />
+          </div>
+          <div class="screenshot-card">
+            <div class="screenshot-caption">
+              <span>4. Data Quality Audit &amp; Custom CSV Import</span>
+              <a href="index.html?tab=tab-data" target="_blank" class="btn-link">Open Live Tab</a>
+            </div>
+            <img src="slides/output_4_data_cleaning_audit.png" alt="Data Quality and CSV Import Screenshot" />
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Predictive-Machine Guard | Section 7: Output Screenshots</span>
+        <span>Slide 7 of 8</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: CONCLUSION -->
+    <section class="slide-frame" data-index="7">
+      <div>
+        <span class="slide-badge">SECTION 8 OF 8 | CONCLUSION</span>
+        <h2 class="slide-title">8. Conclusion</h2>
+        <p class="slide-subtitle">Key Experimental Findings, Quantitative Performance Summary, and Future Scope</p>
+
+        <div class="slide-grid-2">
+          <div class="slide-box">
+            <h3>Key Achievements &amp; Experimental Findings</h3>
+            <ul>
+              <li><strong>Multi-Domain Generalization</strong>: Validated across 12 industrial datasets (56,266 total records) covering CNC machining, jet propulsion, bearings, pumps, wind turbines, and batteries.</li>
+              <li><strong>Reliable Data Cleaning</strong>: Grouped median imputation and 2.2x IQR Winsorization eliminated 100% of missing sensor dropouts and EMI spikes without losing genuine fault signals.</li>
+              <li><strong>High Diagnostic Accuracy</strong>: Ensemble gradient boosting (XGBoost, LightGBM, Random Forest) achieved <strong>97.7% to 99.6% ROC-AUC</strong> and <strong>86.1% to 93.4% Test F1</strong>, while PyTorch 1D-CNN and ANN reached up to <strong>93.3% fault recall</strong>.</li>
+              <li><strong>Actionable Prescriptions</strong>: Recommended parameter adjustments quantify exact RPM, Torque, and Cooling changes along with the resulting Risk Change (%).</li>
+            </ul>
+          </div>
+          <div class="slide-box">
+            <h3>Future Scope &amp; Industrial Extensions</h3>
+            <ul>
+              <li><strong>Direct PLC / OPC-UA Streaming</strong>: Real-time ingestion from Siemens S7 and Modbus TCP industrial controllers at sub-second intervals.</li>
+              <li><strong>Temporal Fusion Transformers</strong>: Multi-horizon sequence forecasting for extended Remaining Useful Life (RUL) trajectories.</li>
+              <li><strong>Automated Maintenance Work Orders</strong>: Webhook integration with enterprise CMMS software (SAP PM, IBM Maximo) when risk exceeds critical thresholds.</li>
+              <li><strong>Federated Multi-Plant Training</strong>: Updating PyTorch weights across multiple factory sites without centralizing raw proprietary sensor data.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="slide-box" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <h3 style="margin-bottom:0.25rem;">Live Demonstration Ready</h3>
+            <p style="font-size:0.86rem;color:var(--text-secondary);">Launch the interactive simulator to demonstrate live fault injection, model switching, and CSV upload.</p>
+          </div>
+          <a href="index.html" class="btn btn-primary">Launch Live Application Demo</a>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Predictive-Machine Guard | Section 8: Conclusion</span>
+        <span>Slide 8 of 8</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-left">
+      <span>Predictive-Machine Guard | Faculty Project Presentation Deck</span>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Console</a>
+      <span class="footer-sep">|</span>
+      <a href="presentation.html" class="active-footer-link">Presentation</a>
+      <span class="footer-sep">|</span>
+      <a href="privacy.html">Privacy Policy</a>
+      <span class="footer-sep">|</span>
+      <a href="terms.html">Terms &amp; Conditions</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem("pmg_theme") || "dark";
+      document.body.setAttribute("data-theme", savedTheme);
+
+      const slides = Array.from(document.querySelectorAll(".slide-frame"));
+      const tabBtns = Array.from(document.querySelectorAll(".slide-tab-btn"));
+      const counterEl = document.getElementById("slideCounterText");
+      let current = 0;
+
+      function showSlide(index) {
+        current = (index + slides.length) % slides.length;
+        slides.forEach((s, i) => s.classList.toggle("active", i === current));
+        tabBtns.forEach((b, i) => b.classList.toggle("active", i === current));
+        counterEl.textContent = (current + 1) + " / " + slides.length;
+      }
+
+      tabBtns.forEach((btn) => {
+        btn.addEventListener("click", () => showSlide(Number(btn.dataset.slide)));
+      });
+
+      document.getElementById("prevSlideBtn").addEventListener("click", () => showSlide(current - 1));
+      document.getElementById("nextSlideBtn").addEventListener("click", () => showSlide(current + 1));
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") showSlide(current + 1);
+        if (e.key === "ArrowLeft") showSlide(current - 1);
+      });
+
+      document.getElementById("fullscreenBtn").addEventListener("click", () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

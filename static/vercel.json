@@ -4,6 +4,7 @@
   "cleanUrls": true,
   "rewrites": [
     { "source": "/static/(.*)", "destination": "/$1" },
+    { "source": "/presentation", "destination": "/presentation.html" },
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/terms", "destination": "/terms.html" }
   ]
