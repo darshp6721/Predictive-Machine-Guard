@@ -46,6 +46,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupTwinEvents();
   setupUploadEvents();
   await fetchInitialState();
+  const params = new URLSearchParams(window.location.search);
+  const initialTab = params.get("tab");
+  if (initialTab) {
+    const tabBtn = document.querySelector(`.tab-btn[data-tab="${initialTab}"]`);
+    if (tabBtn) tabBtn.click();
+  }
 });
 
 function applyTheme(theme) {
@@ -54,7 +60,7 @@ function applyTheme(theme) {
   document.body.setAttribute("data-theme", theme);
   const labelEl = document.getElementById("themeLabel");
   if (labelEl) {
-    labelEl.textContent = theme === "light" ? "Theme: Dark" : "Theme: Light";
+    labelEl.textContent = theme === "light" ? "Dark Theme" : "Light Theme";
   }
   drawLiveStreamCanvas();
   if (state.dashboardData) {
@@ -62,7 +68,7 @@ function applyTheme(theme) {
   }
 }
 
-function showLoading(show, title = "Training Applied ML & Deep Learning Pipeline...") {
+function showLoading(show, title = "Loading dataset and model metrics...") {
   document.getElementById("loadingTitle").textContent = title;
   loadingOverlay.classList.toggle("hidden", !show);
 }
@@ -103,7 +109,7 @@ function setupTopbarEvents() {
   smoteToggleBtn.addEventListener("click", async () => {
     state.useSmote = !state.useSmote;
     smoteToggleBtn.classList.toggle("active", state.useSmote);
-    smoteStatusText.textContent = state.useSmote ? "SMOTE ON" : "SMOTE OFF";
+    smoteStatusText.textContent = state.useSmote ? "SMOTE: On" : "SMOTE: Off";
     await switchDatasetOrSmote();
   });
 
@@ -339,9 +345,9 @@ function applyDashboardState(data) {
     `Train: ${ds.train_records.toLocaleString()} | Val: ${(ds.val_records || 0).toLocaleString()} | Test: ${ds.test_records.toLocaleString()}`;
 
   document.getElementById("kpiCleanedSummary").textContent =
-    `${(prep.total_missing_detected || 0).toLocaleString()} NaNs Imputed`;
+    `${(prep.total_missing_detected || 0).toLocaleString()} Missing Filled`;
   document.getElementById("kpiOutlierSummary").textContent =
-    `${(prep.total_iqr_outliers_detected || 0).toLocaleString()} IQR Outliers Winsorized`;
+    `${(prep.total_iqr_outliers_detected || 0).toLocaleString()} Outliers Capped`;
 
   const bestModelObj = data.model_comparison[0];
   document.getElementById("kpiBestModel").textContent = bestModelObj.model_name;
@@ -353,15 +359,15 @@ function applyDashboardState(data) {
   document.getElementById("kpiRulErrors").textContent = `MAE: ${rul.mae} | RMSE: ${rul.rmse}`;
   document.getElementById("kpiFailureRate").textContent = `${ds.failure_rate_pct}%`;
   document.getElementById("kpiTrainTime").textContent =
-    `${ds.feature_cols.length} features • 7 models (${ds.pipeline_train_time_ms} ms)`;
+    `${ds.feature_cols.length} features | 7 models`;
 
   // 2. Build Sensor Sliders & Dynamic Fault Scenario Buttons
   const scenarioSlots = ["TWF", "HDF", "PWF", "OSF"];
   const ai4iDefaults = {
-    TWF: "Tool Wear (TWF)",
-    HDF: "Heat Dissipation (HDF)",
-    PWF: "Power Fault (PWF)",
-    OSF: "Overstrain (OSF)",
+    TWF: "Tool Wear",
+    HDF: "Heat Dissipation",
+    PWF: "Power Fault",
+    OSF: "Overstrain",
   };
   const modeList = (ds.failure_modes_breakdown || []).map((m) => m.mode);
   scenarioSlots.forEach((slot, idx) => {
@@ -513,7 +519,7 @@ function renderPredictionOutput(pred) {
   const rec = pred.prescription;
 
   document.getElementById("activeInferenceSubtitle").textContent =
-    `Active Model: ${pred.selected_model} • Classical ML Avg: ${rec.classical_ml_avg_risk_pct}% • Deep Learning (ANN/CNN/BiLSTM) Avg: ${rec.deep_learning_avg_risk_pct}%`;
+    `Selected Model: ${pred.selected_model} | Classical ML Avg: ${rec.classical_ml_avg_risk_pct}% | PyTorch Avg: ${rec.deep_learning_avg_risk_pct}%`;
 
   // 1. Severity Badge
   const badge = document.getElementById("severityBadge");
@@ -574,7 +580,7 @@ function renderPredictionOutput(pred) {
     card.className = `consensus-card ${mName === pred.selected_model ? "selected" : ""} ${isDl ? "dl-card" : ""}`;
     const cColor = prob >= 65 ? "text-rose" : prob >= 35 ? "text-amber" : isDl ? "text-teal" : "text-cyan";
     card.innerHTML = `
-      <div class="consensus-name" title="${mName}">${mName}</div>
+      <div class="consensus-name">${mName}</div>
       <div class="consensus-val ${cColor}">${prob}%</div>
     `;
     card.addEventListener("click", async () => {
@@ -585,9 +591,9 @@ function renderPredictionOutput(pred) {
     consensusGrid.appendChild(card);
   });
 
-  // 6. Counterfactual Parameter Optimizer
+  // 6. Parameter Recommendations
   document.getElementById("prescriptionUrgency").textContent =
-    `Urgency Window: ${rec.urgency_window} | ${rec.confidence_tier || ""}`;
+    `Schedule: ${rec.urgency_window}`;
   const riskDelta = Number((rec.projected_optimal_risk_pct - pred.failure_probability_pct).toFixed(2));
   const deltaSign = riskDelta > 0 ? "+" : "";
   document.getElementById("avoidedCostValue").textContent =
@@ -595,7 +601,7 @@ function renderPredictionOutput(pred) {
   document.getElementById("aiExecutiveSummaryBox").textContent = rec.ai_executive_summary || "";
 
   document.getElementById("projectedOptimizationBadge").textContent =
-    `Projected Post-Tuning Risk: ${rec.projected_optimal_risk_pct}% | Projected RUL: ${rec.projected_optimal_rul_min} min`;
+    `Projected Risk: ${rec.projected_optimal_risk_pct}% | RUL: ${rec.projected_optimal_rul_min} min`;
 
   const tuningBody = document.getElementById("aiParameterTuningBody");
   tuningBody.innerHTML = "";
@@ -603,9 +609,9 @@ function renderPredictionOutput(pred) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td><strong>${t.sensor}</strong></td>
-      <td style="font-family:var(--font-mono);">${t.current}</td>
-      <td style="font-family:var(--font-mono);" class="text-emerald"><strong>${t.recommended}</strong></td>
-      <td style="font-family:var(--font-mono);" class="text-cyan">${t.change}</td>
+      <td style="font-family:var(--font-mono);white-space:nowrap;">${t.current}</td>
+      <td style="font-family:var(--font-mono);white-space:nowrap;" class="text-emerald"><strong>${t.recommended}</strong></td>
+      <td style="font-family:var(--font-mono);white-space:nowrap;" class="text-cyan">${t.change}</td>
       <td>${t.rationale}</td>
     `;
     tuningBody.appendChild(tr);
@@ -651,13 +657,15 @@ function renderLocalShapBars(shapList, containerId, limit = 8) {
     const row = document.createElement("div");
     row.className = "shap-row";
     row.innerHTML = `
-      <span class="shap-feature-name" title="${item.feature} = ${item.value}">
-        ${item.feature}${item.is_engineered ? '<span class="eng-badge">PHYS</span>' : ""}
-      </span>
+      <div class="shap-row-top">
+        <span class="shap-feature-name">
+          ${item.feature}${item.is_engineered ? '<span class="eng-badge">Derived</span>' : ""}
+        </span>
+        <span class="shap-val-text ${isPos ? "text-rose" : "text-emerald"}">${sign}${item.shap_impact.toFixed(3)}</span>
+      </div>
       <div class="shap-bar-track">
         <div class="shap-bar-fill ${isPos ? "shap-pos" : "shap-neg"}" style="width: ${pct}%;"></div>
       </div>
-      <span class="shap-val-text ${isPos ? "text-rose" : "text-emerald"}">${sign}${item.shap_impact.toFixed(3)}</span>
     `;
     container.appendChild(row);
   });
@@ -673,11 +681,13 @@ function renderFailureModeProbs(modeList) {
     const row = document.createElement("div");
     row.className = "shap-row";
     row.innerHTML = `
-      <span class="shap-feature-name">${item.mode}</span>
+      <div class="shap-row-top">
+        <span class="shap-feature-name">${item.mode}</span>
+        <span class="shap-val-text">${item.probability_pct}%</span>
+      </div>
       <div class="shap-bar-track">
         <div class="shap-bar-fill ${isHealthy ? "shap-neg" : "shap-pos"}" style="width: ${pct}%;"></div>
       </div>
-      <span class="shap-val-text">${item.probability_pct}%</span>
     `;
     container.appendChild(row);
   });
@@ -694,13 +704,15 @@ function renderGlobalShapAndModes(data) {
     const row = document.createElement("div");
     row.className = "shap-row";
     row.innerHTML = `
-      <span class="shap-feature-name">
-        ${item.feature}${item.is_engineered ? '<span class="eng-badge">PHYS</span>' : ""}
-      </span>
+      <div class="shap-row-top">
+        <span class="shap-feature-name">
+          ${item.feature}${item.is_engineered ? '<span class="eng-badge">Derived</span>' : ""}
+        </span>
+        <span class="shap-val-text text-cyan">${item.importance_pct}%</span>
+      </div>
       <div class="shap-bar-track">
         <div class="shap-bar-fill shap-global" style="width: ${widthPct}%;"></div>
       </div>
-      <span class="shap-val-text text-cyan">${item.importance_pct}%</span>
     `;
     globalContainer.appendChild(row);
   });
@@ -714,11 +726,13 @@ function renderGlobalShapAndModes(data) {
     const row = document.createElement("div");
     row.className = "shap-row";
     row.innerHTML = `
-      <span class="shap-feature-name">${m.mode}</span>
+      <div class="shap-row-top">
+        <span class="shap-feature-name">${m.mode}</span>
+        <span class="shap-val-text">${m.count} (${m.pct}%)</span>
+      </div>
       <div class="shap-bar-track">
         <div class="shap-bar-fill shap-pos" style="width: ${w}%;"></div>
       </div>
-      <span class="shap-val-text">${m.count} (${m.pct}%)</span>
     `;
     dsModesContainer.appendChild(row);
   });
@@ -835,14 +849,14 @@ function renderModelBenchmarkTab(data) {
   models.forEach((m, idx) => {
     const tr = document.createElement("tr");
     const badge = m.is_deep_learning
-      ? '<span class="dl-badge">PYTORCH DL</span>'
-      : '<span class="eng-badge">CLASSICAL ML</span>';
+      ? '<span class="dl-badge">PyTorch</span>'
+      : '<span class="eng-badge">Classical</span>';
     tr.innerHTML = `
-      <td>
+      <td style="white-space:nowrap;">
         <strong style="color:${MODEL_COLORS[m.model_name] || "#38bdf8"}">${m.model_name}</strong>
-        ${idx === 0 ? '<span class="eng-badge">CHAMPION</span>' : ""}
+        ${idx === 0 ? '<span class="eng-badge">Top F1</span>' : ""}
       </td>
-      <td>${badge} <small style="color:var(--text-secondary);">${m.model_family || ""}</small></td>
+      <td>${badge} <span style="color:var(--text-muted);font-size:0.8rem;margin-left:0.3rem;">${m.model_family || ""}</span></td>
       <td><strong>${m.f1_score}%</strong></td>
       <td>${m.roc_auc}%</td>
       <td>${m.pr_auc}%</td>
@@ -852,7 +866,7 @@ function renderModelBenchmarkTab(data) {
       <td><strong>${m.accuracy}%</strong></td>
       <td>${m.mcc}</td>
       <td>${m.brier_score}</td>
-      <td>${m.train_time_ms} ms</td>
+      <td style="white-space:nowrap;">${m.train_time_ms} ms</td>
     `;
     tbody.appendChild(tr);
   });
@@ -883,22 +897,22 @@ function renderModelBenchmarkTab(data) {
   smoteBox.innerHTML = `
     <div class="ablation-cards">
       <div class="ablation-card">
-        <div class="cm-title">Without SMOTE (Imbalanced Baseline)</div>
-        <p style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:0.35rem;">
-          Minority Train Positives: <strong>${sm.train_positives_before}</strong> vs Negatives: <strong>${sm.train_negatives}</strong>
+        <div class="cm-title">Without SMOTE (Imbalanced)</div>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.45rem;">
+          Train Faults: <strong>${sm.train_positives_before}</strong> | Normal: <strong>${sm.train_negatives}</strong>
         </p>
-        <div style="font-family:var(--font-mono);font-size:0.8rem;">
+        <div style="font-family:var(--font-mono);font-size:0.84rem;">
           Recall: <span class="text-amber">${sm.without_smote.recall}%</span> |
           Precision: ${sm.without_smote.precision}% |
           F1: <strong>${sm.without_smote.f1_score}%</strong>
         </div>
       </div>
       <div class="ablation-card">
-        <div class="cm-title">With SMOTE Minority Oversampling</div>
-        <p style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:0.35rem;">
-          Synthesized Train Positives: <strong class="text-emerald">${sm.train_positives_after}</strong>
+        <div class="cm-title">With SMOTE Oversampling</div>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.45rem;">
+          Balanced Train Faults: <strong class="text-emerald">${sm.train_positives_after}</strong>
         </p>
-        <div style="font-family:var(--font-mono);font-size:0.8rem;">
+        <div style="font-family:var(--font-mono);font-size:0.84rem;">
           Recall: <span class="text-emerald">${sm.with_smote.recall}%</span> |
           Precision: ${sm.with_smote.precision}% |
           F1: <strong class="text-cyan">${sm.with_smote.f1_score}%</strong>
@@ -906,8 +920,8 @@ function renderModelBenchmarkTab(data) {
       </div>
     </div>
     <div class="ablation-card">
-      <div class="cm-title">Remaining Useful Life (RUL) Regression Evaluation</div>
-      <div style="font-family:var(--font-mono);font-size:0.83rem;display:flex;gap:1.4rem;margin-top:0.25rem;">
+      <div class="cm-title">Remaining Useful Life (RUL) Regression Fit</div>
+      <div style="font-family:var(--font-mono);font-size:0.86rem;display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:0.35rem;">
         <span>R² Score: <strong class="text-emerald">${rul.r2_score}</strong></span>
         <span>MAE: <strong class="text-cyan">${rul.mae} min</strong></span>
         <span>RMSE: <strong>${rul.rmse} min</strong></span>
@@ -931,12 +945,12 @@ function drawCurveCanvas(canvasId, models, curveKey, xKey, yKey) {
   const H = canvas.height;
   ctx.clearRect(0, 0, W, H);
 
-  const padL = 44, padR = 18, padT = 18, padB = 46;
+  const padL = 46, padR = 20, padT = 18, padB = 72;
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
   const legendColor = state.theme === "light" ? "#0f172a" : "#e2e8f0";
 
-  ctx.strokeStyle = "rgba(148, 163, 184, 0.22)";
+  ctx.strokeStyle = "rgba(148, 163, 184, 0.2)";
   ctx.lineWidth = 1;
   for (let i = 0; i <= 4; i++) {
     const y = padT + (plotH * i) / 4;
@@ -945,9 +959,9 @@ function drawCurveCanvas(canvasId, models, curveKey, xKey, yKey) {
     ctx.lineTo(W - padR, y);
     ctx.stroke();
 
-    ctx.fillStyle = "#64748b";
-    ctx.font = "10px JetBrains Mono";
-    ctx.fillText((1 - i * 0.25).toFixed(2), 6, y + 3);
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "11px JetBrains Mono";
+    ctx.fillText((1 - i * 0.25).toFixed(2), 6, y + 4);
   }
 
   ctx.strokeStyle = "rgba(148, 163, 184, 0.35)";
@@ -963,7 +977,7 @@ function drawCurveCanvas(canvasId, models, curveKey, xKey, yKey) {
     const ys = m[curveKey][yKey];
     const color = MODEL_COLORS[m.model_name] || "#38bdf8";
     ctx.strokeStyle = color;
-    ctx.lineWidth = 2.1;
+    ctx.lineWidth = 2.2;
     ctx.beginPath();
     xs.forEach((xv, i) => {
       const px = padL + xv * plotW;
@@ -975,13 +989,13 @@ function drawCurveCanvas(canvasId, models, curveKey, xKey, yKey) {
 
     const colIdx = idx % 3;
     const rowIdx = Math.floor(idx / 3);
-    const lx = padL + colIdx * 155;
-    const ly = H - 24 + rowIdx * 12;
+    const lx = padL + colIdx * 162;
+    const ly = padT + plotH + 22 + rowIdx * 18;
     ctx.fillStyle = color;
-    ctx.fillRect(lx, ly - 7, 8, 7);
+    ctx.fillRect(lx, ly - 8, 9, 8);
     ctx.fillStyle = legendColor;
-    ctx.font = "10px Inter";
-    ctx.fillText(`${m.model_name} (${m.roc_auc}%)`, lx + 12, ly);
+    ctx.font = "11px Inter";
+    ctx.fillText(`${m.model_name} (${m.roc_auc}%)`, lx + 14, ly);
   });
 }
 
@@ -996,7 +1010,7 @@ function drawDlLossCanvas(canvasId, lossMap) {
   const entries = Object.entries(lossMap || {});
   if (!entries.length) return;
 
-  const padL = 44, padR = 18, padT = 18, padB = 40;
+  const padL = 46, padR = 20, padT = 18, padB = 54;
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
   const legendColor = state.theme === "light" ? "#0f172a" : "#e2e8f0";
@@ -1007,7 +1021,7 @@ function drawDlLossCanvas(canvasId, lossMap) {
     (obj.val_loss || []).forEach((v) => { if (v > maxLoss) maxLoss = v; });
   });
 
-  ctx.strokeStyle = "rgba(148, 163, 184, 0.22)";
+  ctx.strokeStyle = "rgba(148, 163, 184, 0.2)";
   ctx.lineWidth = 1;
   for (let i = 0; i <= 4; i++) {
     const y = padT + (plotH * i) / 4;
@@ -1016,9 +1030,9 @@ function drawDlLossCanvas(canvasId, lossMap) {
     ctx.lineTo(W - padR, y);
     ctx.stroke();
 
-    ctx.fillStyle = "#64748b";
-    ctx.font = "10px JetBrains Mono";
-    ctx.fillText((maxLoss * (1 - i * 0.25)).toFixed(2), 6, y + 3);
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "11px JetBrains Mono";
+    ctx.fillText((maxLoss * (1 - i * 0.25)).toFixed(2), 6, y + 4);
   }
 
   entries.forEach(([name, obj], idx) => {
@@ -1026,7 +1040,6 @@ function drawDlLossCanvas(canvasId, lossMap) {
     const tLoss = obj.train_loss || [];
     const vLoss = obj.val_loss || [];
 
-    // Solid line for Train Loss
     ctx.strokeStyle = color;
     ctx.lineWidth = 2.2;
     ctx.setLineDash([]);
@@ -1039,7 +1052,6 @@ function drawDlLossCanvas(canvasId, lossMap) {
     });
     ctx.stroke();
 
-    // Dashed line for Validation Loss
     ctx.setLineDash([4, 3]);
     ctx.beginPath();
     vLoss.forEach((val, i) => {
@@ -1051,13 +1063,13 @@ function drawDlLossCanvas(canvasId, lossMap) {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    const lx = padL + idx * 155;
-    const ly = H - 14;
+    const lx = padL + idx * 162;
+    const ly = padT + plotH + 28;
     ctx.fillStyle = color;
-    ctx.fillRect(lx, ly - 7, 10, 7);
+    ctx.fillRect(lx, ly - 8, 10, 8);
     ctx.fillStyle = legendColor;
-    ctx.font = "10px Inter";
-    ctx.fillText(`${name} (Train/Val)`, lx + 14, ly);
+    ctx.font = "11px Inter";
+    ctx.fillText(`${name} (Train / Val)`, lx + 14, ly);
   });
 }
 
@@ -1089,7 +1101,7 @@ async function loadSampleRowsTable() {
       const actionTd = document.createElement("td");
       const btn = document.createElement("button");
       btn.className = `chip-btn ${isFail ? "chip-danger" : "chip-ok"}`;
-      btn.textContent = "Load into Twin";
+      btn.textContent = "Load";
       btn.addEventListener("click", async () => {
         state.sensorInputs = { ...r };
         updateSlidersFromInputs();
@@ -1103,8 +1115,8 @@ async function loadSampleRowsTable() {
         const td = document.createElement("td");
         if (c === "Machine failure") {
           td.innerHTML = isFail
-            ? `<span class="text-rose" style="font-weight:700;">1 (FAILURE)</span>`
-            : `<span class="text-emerald">0 (Healthy)</span>`;
+            ? `<span class="text-rose" style="font-weight:700;">1 (Fault)</span>`
+            : `<span class="text-emerald">0 (Normal)</span>`;
         } else {
           td.textContent = r[c];
         }
