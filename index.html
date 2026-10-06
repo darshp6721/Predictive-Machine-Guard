@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictive-Machine Guard | Industrial Predictive Maintenance Telemetry &amp; ML/DL Diagnostics</title>
+  <title>Predictive-Machine Guard | Equipment Health &amp; Predictive Maintenance</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="alternate icon" type="image/x-icon" href="favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Top Industrial Command Bar -->
+  <!-- Top Header Bar -->
   <header class="topbar">
     <div class="brand-block">
       <div class="brand-logo" aria-hidden="true">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="3" width="7" height="7" />
           <rect x="14" y="3" width="7" height="7" />
           <rect x="14" y="14" width="7" height="7" />
@@ -26,170 +26,165 @@
       <div>
         <div class="brand-title-row">
           <h1>Predictive-Machine Guard</h1>
-          <span class="version-pill">SCADA / ML-DL v2.0</span>
         </div>
-        <p class="brand-subtitle">12 Industrial Datasets | IQR Outlier &amp; Median Imputation | XGBoost, LightGBM, RF, LogReg + PyTorch ANN, 1D-CNN, BiLSTM | TreeSHAP</p>
+        <p class="brand-subtitle">Equipment Health Monitoring &amp; Maintenance Console</p>
       </div>
     </div>
 
     <div class="topbar-controls">
       <div class="control-group">
-        <label for="datasetSelect">Active Industrial Dataset (12 Benchmarks)</label>
+        <label for="datasetSelect">Dataset</label>
         <select id="datasetSelect" class="select-input">
-          <option value="ai4i2020">1. UCI AI4I 2020 CNC Milling Machine (10k Rows)</option>
-          <option value="cmapss">2. NASA CMAPSS Turbofan Jet Engine (Multi-Sensor RUL)</option>
-          <option value="custom_plant">3. CNC &amp; Robotic Vibro-Acoustic Plant / Uploaded CSV</option>
-          <option value="ims_bearing">4. NASA IMS Bearing Run-to-Failure Vibration</option>
-          <option value="secom_semiconductor">5. UCI SECOM Semiconductor Wafer Etch Chamber</option>
-          <option value="hydraulic_rig">6. UCI Hydraulic Test Rig Condition Monitoring</option>
-          <option value="centrifugal_pump">7. Industrial Centrifugal Pump Cavitation &amp; Seal</option>
-          <option value="wind_turbine_gearbox">8. Wind &amp; Steam Turbine Gearbox &amp; Generator</option>
-          <option value="steel_rolling_mill">9. Steel Hot-Rolling Mill Work-Roll &amp; Strip</option>
-          <option value="robotic_spot_welding">10. Automotive Robotic Spot-Welding &amp; Press Shop</option>
-          <option value="lithium_battery_cell">11. EV Lithium-Ion Battery Cell Formation &amp; Aging</option>
+          <option value="ai4i2020">1. UCI AI4I 2020 CNC Milling Machine</option>
+          <option value="cmapss">2. NASA CMAPSS Turbofan Jet Engine</option>
+          <option value="custom_plant">3. CNC &amp; Robotic Vibro-Acoustic Plant</option>
+          <option value="ims_bearing">4. NASA IMS Bearing Vibration</option>
+          <option value="secom_semiconductor">5. UCI SECOM Semiconductor Etch Chamber</option>
+          <option value="hydraulic_rig">6. UCI Hydraulic Test Rig Monitoring</option>
+          <option value="centrifugal_pump">7. Centrifugal Pump Cavitation &amp; Seal</option>
+          <option value="wind_turbine_gearbox">8. Wind Turbine Gearbox &amp; Generator</option>
+          <option value="steel_rolling_mill">9. Steel Hot-Rolling Mill Stand</option>
+          <option value="robotic_spot_welding">10. Robotic Spot-Welding &amp; Press Shop</option>
+          <option value="lithium_battery_cell">11. EV Lithium-Ion Battery Cell Aging</option>
           <option value="pharma_bioreactor">12. Pharmaceutical Bioreactor &amp; Freeze-Dryer</option>
         </select>
       </div>
 
       <div class="control-group">
-        <label for="modelSelect">Active Inference Model (ML / DL)</label>
+        <label for="modelSelect">Active Model</label>
         <select id="modelSelect" class="select-input">
-          <optgroup label="Classical Applied ML">
-            <option value="XGBoost">XGBoost Classifier</option>
-            <option value="LightGBM">LightGBM Classifier</option>
-            <option value="Random Forest">Random Forest Classifier</option>
+          <optgroup label="Classical Machine Learning">
+            <option value="XGBoost">XGBoost</option>
+            <option value="LightGBM">LightGBM</option>
+            <option value="Random Forest">Random Forest</option>
             <option value="Logistic Regression">Logistic Regression</option>
           </optgroup>
           <optgroup label="Deep Learning (PyTorch)">
-            <option value="ANN (Deep MLP)">ANN (Deep Multi-Layer Perceptron)</option>
-            <option value="1D-CNN">1D-CNN (Convolutional Neural Net)</option>
-            <option value="BiLSTM">BiLSTM (Bidirectional LSTM)</option>
+            <option value="ANN (Deep MLP)">ANN (Deep MLP)</option>
+            <option value="1D-CNN">1D-CNN</option>
+            <option value="BiLSTM">BiLSTM</option>
           </optgroup>
         </select>
       </div>
 
       <div class="control-group toggle-group">
-        <label>SMOTE Balancing</label>
-        <button id="smoteToggleBtn" class="btn-toggle active" title="Toggle SMOTE Minority Oversampling and retrain pipeline">
+        <label>Class Balance</label>
+        <button id="smoteToggleBtn" class="btn-toggle active" title="Toggle SMOTE oversampling on training split">
           <span class="dot"></span>
-          <span id="smoteStatusText">SMOTE ON</span>
+          <span id="smoteStatusText">SMOTE: On</span>
         </button>
       </div>
 
       <div class="control-actions">
-        <button id="themeToggleBtn" class="btn btn-secondary" title="Switch between Dark Mode and Light Mode">
+        <button id="themeToggleBtn" class="btn btn-secondary" title="Switch between Dark and Light theme">
           <span id="themeIcon" class="theme-indicator"></span>
-          <span id="themeLabel">Theme: Light</span>
+          <span id="themeLabel">Light Theme</span>
         </button>
-        <label for="csvUploadInput" class="btn btn-secondary" title="Upload your own custom manufacturing CSV dataset">
+        <label for="csvUploadInput" class="btn btn-secondary" title="Upload a custom telemetry CSV file">
           Upload CSV
         </label>
         <input type="file" id="csvUploadInput" accept=".csv" hidden />
-        <a id="exportCsvBtn" href="/api/download-dataset" class="btn btn-outline" title="Download active cleaned dataset as CSV">Export CSV</a>
+        <a id="exportCsvBtn" href="/api/download-dataset" class="btn btn-outline" title="Download cleaned dataset as CSV">Export CSV</a>
       </div>
     </div>
   </header>
 
-  <!-- Executive KPI Summary Strip -->
+  <!-- Summary Metrics Strip -->
   <section class="kpi-strip">
     <div class="kpi-card">
-      <span class="kpi-label">STRATIFIED SPLIT (70 / 10 / 20)</span>
-      <div class="kpi-value" id="kpiTotalRecords">10,000</div>
-      <span class="kpi-meta" id="kpiSplitMeta">Train: 70% | Val: 10% | Test: 20%</span>
+      <span class="kpi-label">Dataset Records</span>
+      <div class="kpi-value" id="kpiTotalRecords">5,000</div>
+      <span class="kpi-meta" id="kpiSplitMeta">Train: 3,500 | Val: 500 | Test: 1,000</span>
     </div>
     <div class="kpi-card">
-      <span class="kpi-label">PREPROCESSING AUDIT</span>
-      <div class="kpi-value text-amber" id="kpiCleanedSummary">-- Imputed</div>
-      <span class="kpi-meta" id="kpiOutlierSummary">-- IQR Outliers Winsorized</span>
+      <span class="kpi-label">Data Cleaning</span>
+      <div class="kpi-value text-amber" id="kpiCleanedSummary">-- Missing Filled</div>
+      <span class="kpi-meta" id="kpiOutlierSummary">-- Outliers Capped</span>
     </div>
     <div class="kpi-card">
-      <span class="kpi-label">TOP MODEL (HELD-OUT TEST F1)</span>
-      <div class="kpi-value text-cyan" id="kpiBestModel">XGBoost</div>
+      <span class="kpi-label">Best Model (Test F1)</span>
+      <div class="kpi-value text-cyan" id="kpiBestModel">Random Forest</div>
       <span class="kpi-meta" id="kpiBestModelMetrics">F1: --% | ROC-AUC: --%</span>
     </div>
     <div class="kpi-card">
-      <span class="kpi-label">RUL REGRESSOR FIT (TEST SET)</span>
+      <span class="kpi-label">RUL Model Fit</span>
       <div class="kpi-value text-emerald" id="kpiRulR2">R²: --</div>
-      <span class="kpi-meta" id="kpiRulErrors">MAE: -- min | RMSE: -- min</span>
+      <span class="kpi-meta" id="kpiRulErrors">MAE: -- | RMSE: --</span>
     </div>
     <div class="kpi-card">
-      <span class="kpi-label">EMPIRICAL FAULT RATE &amp; FEATURES</span>
+      <span class="kpi-label">Dataset Fault Rate</span>
       <div class="kpi-value" id="kpiFailureRate">3.39%</div>
-      <span class="kpi-meta" id="kpiTrainTime">-- features (-- ms)</span>
+      <span class="kpi-meta" id="kpiTrainTime">-- features | 7 models</span>
     </div>
   </section>
 
   <!-- Navigation Tabs -->
-  <nav class="workspace-tabs">
+  <nav class="workspace-tabs" aria-label="Main Navigation">
     <button class="tab-btn active" data-tab="tab-twin">
-      1. Digital Twin Telemetry &amp; Setpoint Optimizer
+      Overview &amp; Simulator
     </button>
     <button class="tab-btn" data-tab="tab-models">
-      2. Classical ML &amp; PyTorch Deep Learning Evaluation
+      Model Comparison
     </button>
     <button class="tab-btn" data-tab="tab-xai">
-      3. TreeSHAP Attribution &amp; Failure Mode Classification
+      Feature Importance &amp; Faults
     </button>
     <button class="tab-btn" data-tab="tab-data">
-      4. Preprocessing Audit (Imputation / IQR) &amp; CSV Ingestion
+      Data Quality &amp; CSV Import
     </button>
   </nav>
 
-  <!-- Main Content Container -->
+  <!-- Main Workspace Container -->
   <main class="workspace-container">
-    <!-- TAB 1: DIGITAL TWIN TELEMETRY & SETPOINT OPTIMIZER -->
+    <!-- TAB 1: OVERVIEW & SIMULATOR -->
     <section id="tab-twin" class="tab-panel active">
       <div class="twin-grid">
-        <!-- Left Column: Interactive Sensor Controls & Scenario Injector -->
+        <!-- Left Column: Operating Parameters -->
         <div class="panel-card sensor-control-panel">
           <div class="panel-header">
             <div>
-              <h2>Digital Twin Sensor Controls</h2>
-              <p>Modify operating parameters or inject fault states from dataset</p>
+              <h2>Operating Parameters</h2>
+              <p>Adjust sensor values or load a fault preset</p>
             </div>
             <div class="tier-selector">
-              <span>Tier:</span>
+              <span>Grade:</span>
               <button class="tier-btn" data-type="L">L</button>
               <button class="tier-btn active" data-type="M">M</button>
               <button class="tier-btn" data-type="H">H</button>
             </div>
           </div>
 
-          <!-- Scenario Quick Injectors -->
           <div class="scenario-bar">
-            <span class="scenario-label">Fault State Injection:</span>
+            <span class="scenario-label">Load Preset</span>
             <div class="scenario-buttons">
-              <button class="chip-btn chip-ok" data-scenario="normal">Nominal</button>
-              <button class="chip-btn chip-warn" data-scenario="TWF">Tool Wear (TWF)</button>
-              <button class="chip-btn chip-warn" data-scenario="HDF">Heat Dissipation (HDF)</button>
-              <button class="chip-btn chip-danger" data-scenario="PWF">Power Fault (PWF)</button>
-              <button class="chip-btn chip-danger" data-scenario="OSF">Overstrain (OSF)</button>
+              <button class="chip-btn chip-ok" data-scenario="normal">Normal</button>
+              <button class="chip-btn chip-warn" data-scenario="TWF">Tool Wear</button>
+              <button class="chip-btn chip-warn" data-scenario="HDF">Heat Dissipation</button>
+              <button class="chip-btn chip-danger" data-scenario="PWF">Power Fault</button>
+              <button class="chip-btn chip-danger" data-scenario="OSF">Overstrain</button>
             </div>
           </div>
 
-          <!-- Dynamic Sliders Container -->
           <div id="sensorSlidersContainer" class="sliders-scroll"></div>
 
-          <!-- Engineered Physics Features Box -->
           <div class="engineered-box">
-            <div class="engineered-title">Derived Physical &amp; Interaction Features</div>
+            <div class="engineered-title">Calculated Physical Metrics</div>
             <div id="engineeredFeaturesGrid" class="engineered-grid"></div>
           </div>
         </div>
 
-        <!-- Middle Column: Real-Time Prediction Gauges, 7-Model Consensus & Setpoint Optimizer -->
+        <!-- Middle Column: Equipment Health & Recommendations -->
         <div class="twin-center-col">
           <div class="panel-card gauges-panel">
             <div class="panel-header">
               <div>
-                <h2>Real-Time Equipment Health &amp; Multi-Model Prognostics</h2>
-                <p id="activeInferenceSubtitle">Live inference across 4 Classical ML and 3 PyTorch Deep Learning models</p>
+                <h2>Equipment Health Summary</h2>
+                <p id="activeInferenceSubtitle">Active model diagnostics and ensemble comparison</p>
               </div>
-              <span id="severityBadge" class="status-badge status-success">OPTIMAL</span>
+              <span id="severityBadge" class="status-badge status-success">NOMINAL</span>
             </div>
 
             <div class="gauges-row">
-              <!-- Failure Probability Gauge -->
               <div class="gauge-item">
                 <svg viewBox="0 0 140 90" class="radial-gauge">
                   <path d="M 15 75 A 55 55 0 0 1 125 75" class="gauge-bg" />
@@ -197,11 +192,10 @@
                 </svg>
                 <div class="gauge-readout">
                   <span id="failureProbValue" class="gauge-number">1.2%</span>
-                  <span class="gauge-caption">Predicted Failure Probability</span>
+                  <span class="gauge-caption">Failure Probability</span>
                 </div>
               </div>
 
-              <!-- Machine Health Index Gauge -->
               <div class="gauge-item">
                 <svg viewBox="0 0 140 90" class="radial-gauge">
                   <path d="M 15 75 A 55 55 0 0 1 125 75" class="gauge-bg" />
@@ -209,13 +203,12 @@
                 </svg>
                 <div class="gauge-readout">
                   <span id="healthIndexValue" class="gauge-number text-emerald">94.5%</span>
-                  <span class="gauge-caption">Composite Health Index (MHI)</span>
+                  <span class="gauge-caption">Equipment Health Index</span>
                 </div>
               </div>
 
-              <!-- Remaining Useful Life (RUL) Card -->
               <div class="rul-box">
-                <span class="rul-title">PREDICTED RUL</span>
+                <span class="rul-title">Estimated Remaining Useful Life</span>
                 <div class="rul-main-value">
                   <span id="rulValue">178.4</span>
                   <small id="rulUnit">min</small>
@@ -223,53 +216,49 @@
                 <div class="rul-progress-track">
                   <div id="rulProgressBar" class="rul-progress-fill" style="width: 80%;"></div>
                 </div>
-                <span id="dominantModeLabel" class="rul-sub">Class: No Failure</span>
+                <span id="dominantModeLabel" class="rul-sub">Mode: No Failure</span>
               </div>
             </div>
 
-            <!-- 7-Model Consensus Bar (4 Classical ML + 3 Deep Learning) -->
             <div class="consensus-section">
-              <div class="section-mini-title">7-Model Failure Probability Output (Classical ML + PyTorch ANN / 1D-CNN / BiLSTM)</div>
+              <div class="section-mini-title">Failure Probability Across All 7 Models (Click to Select)</div>
               <div id="modelConsensusGrid" class="consensus-grid-7"></div>
             </div>
           </div>
 
-          <!-- Counterfactual Parameter Optimizer & Maintenance Prescription Card -->
           <div class="panel-card prescription-panel">
             <div class="panel-header">
               <div>
-                <h2>Counterfactual Parameter Optimizer &amp; Maintenance Protocol</h2>
-                <p id="prescriptionUrgency">Operating Status: Nominal Continuous Operation</p>
+                <h2>Recommended Parameter Adjustments</h2>
+                <p id="prescriptionUrgency">Status: Normal operation</p>
               </div>
               <div class="copilot-header-actions">
                 <div class="savings-pill">
-                  <span>Post-Tuning Risk Delta:</span>
+                  <span>Risk Change:</span>
                   <strong id="avoidedCostValue">0.0%</strong>
                 </div>
-                <button id="applyAiOptimalBtn" class="btn btn-primary" title="Set Digital Twin sliders to counterfactual optimal values">
-                  Apply Optimal Setpoints
+                <button id="applyAiOptimalBtn" class="btn btn-primary" title="Apply recommended setpoints to the parameter sliders">
+                  Apply Recommended Values
                 </button>
               </div>
             </div>
 
-            <!-- Technical Diagnostic Summary Banner -->
             <div id="aiExecutiveSummaryBox" class="ai-summary-banner"></div>
 
-            <!-- Counterfactual Parameter Tuning Table -->
             <div class="tuning-section">
               <div class="tuning-header-row">
-                <span class="section-mini-title">Counterfactual Parameter Setpoint Table</span>
-                <span id="projectedOptimizationBadge" class="projected-pill">Projected Post-Tuning Risk: --% | RUL: -- min</span>
+                <span class="section-mini-title">Parameter Setpoint Comparison</span>
+                <span id="projectedOptimizationBadge" class="projected-pill">Projected Risk: --% | RUL: -- min</span>
               </div>
               <div class="table-responsive">
                 <table class="benchmark-table compact-table">
                   <thead>
                     <tr>
-                      <th>Sensor / Parameter</th>
-                      <th>Current Value</th>
-                      <th>Recommended Setpoint</th>
-                      <th>Delta</th>
-                      <th>Physical &amp; SHAP Basis</th>
+                      <th>Parameter</th>
+                      <th>Current</th>
+                      <th>Recommended</th>
+                      <th>Adjustment</th>
+                      <th>Engineering Rationale</th>
                     </tr>
                   </thead>
                   <tbody id="aiParameterTuningBody"></tbody>
@@ -279,11 +268,11 @@
 
             <div class="prescription-columns">
               <div class="prescription-block">
-                <h3>Physical Threshold &amp; SHAP Diagnostics</h3>
+                <h3>Diagnostic Findings</h3>
                 <ul id="physicsDiagnosticsList" class="diagnostic-list"></ul>
               </div>
               <div class="prescription-block">
-                <h3>Prioritized Maintenance Protocol &amp; Required Parts</h3>
+                <h3>Maintenance Checklist &amp; Parts</h3>
                 <ul id="recommendedActionsList" class="action-list"></ul>
                 <div id="sparePartsLine" class="spare-parts-tag"></div>
               </div>
@@ -291,26 +280,26 @@
           </div>
         </div>
 
-        <!-- Right Column: Live Telemetry Stream Simulator & Local SHAP Quick View -->
+        <!-- Right Column: Live Stream & Local Drivers -->
         <div class="twin-right-col">
           <div class="panel-card stream-panel">
             <div class="panel-header">
               <div>
-                <h2>Telemetry Stream Monitor</h2>
-                <p>Sequential dataset playback and fault injection log</p>
+                <h2>Live Telemetry Monitor</h2>
+                <p>Sequential playback and event log</p>
               </div>
               <div class="stream-btn-group">
                 <button id="streamToggleBtn" class="btn btn-primary">Start Stream</button>
-                <button id="streamSpikeBtn" class="btn btn-danger-outline" title="Sample a fault record from active dataset">Inject Fault</button>
+                <button id="streamSpikeBtn" class="btn btn-danger-outline" title="Load a fault sample from the active dataset">Inject Fault</button>
               </div>
             </div>
 
             <div class="canvas-wrapper">
-              <canvas id="liveStreamCanvas" width="460" height="195"></canvas>
+              <canvas id="liveStreamCanvas" width="460" height="205"></canvas>
             </div>
 
             <div class="alert-feed-header">
-              <span>Telemetry Event Log</span>
+              <span>Event Log</span>
               <button id="clearAlertsBtn" class="btn-link">Clear</button>
             </div>
             <div id="liveAlertFeed" class="alert-feed"></div>
@@ -319,8 +308,8 @@
           <div class="panel-card mini-shap-panel">
             <div class="panel-header">
               <div>
-                <h2>Local TreeSHAP Feature Contributions</h2>
-                <p>Log-odds attribution for active telemetry vector</p>
+                <h2>Key Risk Drivers (Current Reading)</h2>
+                <p>Feature contributions to current failure risk</p>
               </div>
             </div>
             <div id="liveLocalShapBars" class="shap-bars-container"></div>
@@ -329,23 +318,23 @@
       </div>
     </section>
 
-    <!-- TAB 2: CLASSICAL ML & DEEP LEARNING (ANN / 1D-CNN / BiLSTM) LAB -->
+    <!-- TAB 2: MODEL COMPARISON -->
     <section id="tab-models" class="tab-panel">
       <div class="models-grid">
         <div class="panel-card full-width">
           <div class="panel-header">
             <div>
-              <h2>7-Model Evaluation Benchmark (4 Classical ML + 3 PyTorch Deep Learning Architectures)</h2>
-              <p>Evaluated on Stratified Train (70%), Validation (10%), and Held-Out Test (20%) Splits</p>
+              <h2>Model Performance Summary (Held-Out Test Split)</h2>
+              <p>Evaluated on 70% Train, 10% Validation, and 20% Test splits across Classical ML and PyTorch models</p>
             </div>
           </div>
           <div class="table-responsive">
             <table class="benchmark-table">
               <thead>
                 <tr>
-                  <th>Model Architecture</th>
-                  <th>Family</th>
-                  <th>F1-Score (Test)</th>
+                  <th>Model</th>
+                  <th>Category</th>
+                  <th>F1-Score</th>
                   <th>ROC-AUC</th>
                   <th>PR-AUC</th>
                   <th>Recall</th>
@@ -354,7 +343,7 @@
                   <th>Test Acc</th>
                   <th>MCC</th>
                   <th>Brier Loss</th>
-                  <th>Fit Time</th>
+                  <th>Train Time</th>
                 </tr>
               </thead>
               <tbody id="modelBenchmarkTableBody"></tbody>
@@ -362,37 +351,35 @@
           </div>
         </div>
 
-        <!-- ROC Curve & PR Curve Canvases -->
         <div class="panel-card">
           <div class="panel-header">
             <div>
-              <h2>Receiver Operating Characteristic (ROC Curves: All 7 Models)</h2>
-              <p>True Positive Rate vs. False Positive Rate on held-out test split (20%)</p>
+              <h2>ROC Curves (All 7 Models)</h2>
+              <p>True Positive Rate vs. False Positive Rate on the 20% test set</p>
             </div>
           </div>
           <div class="canvas-wrapper chart-box">
-            <canvas id="rocChartCanvas" width="520" height="310"></canvas>
+            <canvas id="rocChartCanvas" width="540" height="350"></canvas>
           </div>
         </div>
 
         <div class="panel-card">
           <div class="panel-header">
             <div>
-              <h2>PyTorch Deep Learning Epoch Convergence (ANN, 1D-CNN, BiLSTM)</h2>
-              <p>Training (solid) and Validation (dashed) Binary Cross-Entropy Loss across 16 epochs</p>
+              <h2>PyTorch Training &amp; Validation Loss</h2>
+              <p>Cross-entropy loss per epoch for ANN, 1D-CNN, and BiLSTM (solid: train, dashed: validation)</p>
             </div>
           </div>
           <div class="canvas-wrapper chart-box">
-            <canvas id="dlLossChartCanvas" width="520" height="310"></canvas>
+            <canvas id="dlLossChartCanvas" width="540" height="350"></canvas>
           </div>
         </div>
 
-        <!-- Confusion Matrices & SMOTE Impact Analysis -->
         <div class="panel-card">
           <div class="panel-header">
             <div>
-              <h2>Held-Out Test Confusion Matrices (All 7 Models)</h2>
-              <p>True Negatives (TN), False Positives (FP), False Negatives (FN), True Positives (TP)</p>
+              <h2>Test Set Confusion Matrices</h2>
+              <p>True Negatives (TN), False Positives (FP), False Negatives (FN), and True Positives (TP)</p>
             </div>
           </div>
           <div id="confusionMatricesGrid" class="cm-grid"></div>
@@ -401,8 +388,8 @@
         <div class="panel-card">
           <div class="panel-header">
             <div>
-              <h2>SMOTE Class-Imbalance Ablation &amp; RUL Regressor Metrics</h2>
-              <p>Comparison of Random Forest test metrics with and without SMOTE oversampling</p>
+              <h2>Class Balancing (SMOTE) &amp; RUL Regression Metrics</h2>
+              <p>Effect of SMOTE minority oversampling on recall and F1-score</p>
             </div>
           </div>
           <div id="smoteAblationContainer" class="smote-ablation-box"></div>
@@ -410,14 +397,14 @@
       </div>
     </section>
 
-    <!-- TAB 3: EXPLAINABLE AI (SHAP) & FAILURE MODES -->
+    <!-- TAB 3: FEATURE IMPORTANCE & FAULTS -->
     <section id="tab-xai" class="tab-panel">
       <div class="xai-grid">
         <div class="panel-card">
           <div class="panel-header">
             <div>
-              <h2>Global TreeSHAP Feature Importance Ranking</h2>
-              <p>Mean |SHAP| attribution across held-out test set (derived features marked [PHYS])</p>
+              <h2>Global Feature Importance (SHAP)</h2>
+              <p>Average impact of each parameter across the test dataset</p>
             </div>
           </div>
           <div id="globalShapContainer" class="shap-bars-container large"></div>
@@ -426,8 +413,8 @@
         <div class="panel-card">
           <div class="panel-header">
             <div>
-              <h2>Local Instance TreeSHAP Attribution</h2>
-              <p>Per-feature log-odds contribution for the current Digital Twin telemetry vector</p>
+              <h2>Current Reading Feature Impact</h2>
+              <p>How each parameter pushes current failure risk higher (+) or lower (-)</p>
             </div>
           </div>
           <div id="detailedLocalShapContainer" class="shap-bars-container large"></div>
@@ -436,8 +423,8 @@
         <div class="panel-card">
           <div class="panel-header">
             <div>
-              <h2>Multi-Class Failure Mode Classification Probabilities</h2>
-              <p>Predicted probability distribution across dataset failure modes</p>
+              <h2>Predicted Fault Mode Breakdown</h2>
+              <p>Probability distribution across specific failure modes for the current reading</p>
             </div>
           </div>
           <div id="failureModeProbsContainer" class="shap-bars-container"></div>
@@ -446,8 +433,8 @@
         <div class="panel-card">
           <div class="panel-header">
             <div>
-              <h2>Empirical Failure Mode Distribution in Active Dataset</h2>
-              <p>Record counts and percentages per failure mode in cleaned dataset</p>
+              <h2>Dataset Fault Mode Distribution</h2>
+              <p>Historical fault counts and percentages in the active dataset</p>
             </div>
           </div>
           <div id="datasetFailureModesBreakdown" class="shap-bars-container"></div>
@@ -455,29 +442,28 @@
       </div>
     </section>
 
-    <!-- TAB 4: DATA PREPROCESSING AUDIT (MISSING / OUTLIERS) & CUSTOM CSV STUDIO -->
+    <!-- TAB 4: DATA QUALITY & CSV IMPORT -->
     <section id="tab-data" class="tab-panel">
       <div class="data-grid">
-        <!-- Data Preprocessing & Outlier/Missing Audit Table -->
         <div class="panel-card full-width">
           <div class="panel-header">
             <div>
-              <h2>Automated Data Preprocessing Audit: Missing Value Imputation &amp; Outlier Capping</h2>
-              <p id="preprocessingMethodSubtitle">Type-Stratified Median Imputation + Tukey 1.5xIQR / Z-Score Outlier Audit &amp; Winsorization</p>
+              <h2>Data Quality &amp; Cleaning Summary</h2>
+              <p id="preprocessingMethodSubtitle">Missing value imputation and IQR outlier capping across sensor columns</p>
             </div>
           </div>
           <div class="table-responsive">
             <table class="benchmark-table">
               <thead>
                 <tr>
-                  <th>Sensor / Feature Column</th>
-                  <th>Missing (Before to After)</th>
-                  <th>Imputation Strategy</th>
-                  <th>IQR Outliers (1.5xIQR)</th>
-                  <th>Extreme Spikes (|Z| &gt; 3)</th>
-                  <th>Outlier Treatment Applied</th>
-                  <th>Mean +/- Std (Before)</th>
-                  <th>Mean +/- Std (After)</th>
+                  <th>Column</th>
+                  <th>Missing Values (Before to After)</th>
+                  <th>Imputation Method</th>
+                  <th>IQR Outliers</th>
+                  <th>Z-Score Spikes (|Z| &gt; 3)</th>
+                  <th>Capping Range</th>
+                  <th>Mean +/- Std (Raw)</th>
+                  <th>Mean +/- Std (Cleaned)</th>
                 </tr>
               </thead>
               <tbody id="preprocessingAuditTableBody"></tbody>
@@ -488,8 +474,8 @@
         <div class="panel-card full-width">
           <div class="panel-header">
             <div>
-              <h2>Custom Manufacturing CSV Ingestion &amp; Auto-Schema Mapper</h2>
-              <p>Upload any CSV dataset to run automated missing/outlier cleaning and retrain all 7 ML/DL models</p>
+              <h2>Import Custom Telemetry CSV</h2>
+              <p>Upload a CSV file to clean missing values, cap outliers, and evaluate models</p>
             </div>
           </div>
           <div class="upload-dropzone" id="dropzoneArea">
@@ -500,9 +486,9 @@
                 <line x1="12" y1="3" x2="12" y2="15"/>
               </svg>
             </div>
-            <h3>Drop a manufacturing telemetry CSV file here or select from disk</h3>
-            <p>Compatible with UCI AI4I 2020, NASA CMAPSS, or custom PLC/SCADA sensor tables (minimum 30 rows).</p>
-            <button id="browseCsvBtn" class="btn btn-primary">Select CSV File</button>
+            <h3>Drop a CSV file here or select from your computer</h3>
+            <p>Supports standard sensor tables with at least 30 rows.</p>
+            <button id="browseCsvBtn" class="btn btn-primary">Choose CSV File</button>
             <div id="uploadStatusBanner" class="upload-status hidden"></div>
           </div>
         </div>
@@ -510,10 +496,10 @@
         <div class="panel-card full-width">
           <div class="panel-header">
             <div>
-              <h2>Dataset Record Inspector (Sampled Healthy &amp; Failure Rows)</h2>
-              <p>Click <strong>"Load into Twin"</strong> on any record to load its sensor values into the Digital Twin</p>
+              <h2>Sample Dataset Records</h2>
+              <p>Select <strong>Load</strong> on any row to inspect its sensor values in the simulator</p>
             </div>
-            <button id="refreshSamplesBtn" class="btn btn-secondary">Sample New Records</button>
+            <button id="refreshSamplesBtn" class="btn btn-secondary">Refresh Samples</button>
           </div>
           <div class="table-responsive">
             <table class="benchmark-table" id="sampleRowsTable">
@@ -528,10 +514,10 @@
 
   <footer class="app-footer">
     <div class="footer-left">
-      <span>Predictive-Machine Guard | Industrial Predictive Maintenance Telemetry &amp; ML/DL Diagnostics</span>
+      <span>Predictive-Machine Guard | Equipment Health Monitoring &amp; Maintenance Console</span>
     </div>
     <div class="footer-links">
-      <a href="index.html" class="active-footer-link">Telemetry Console</a>
+      <a href="index.html" class="active-footer-link">Console</a>
       <span class="footer-sep">|</span>
       <a href="privacy.html">Privacy Policy</a>
       <span class="footer-sep">|</span>
@@ -539,11 +525,10 @@
     </div>
   </footer>
 
-  <!-- Loading Overlay for Dataset Retraining -->
   <div id="loadingOverlay" class="loading-overlay hidden">
     <div class="spinner"></div>
-    <h3 id="loadingTitle">Running ML &amp; Deep Learning Pipeline...</h3>
-    <p id="loadingSubtitle">Imputing Missing Values | Winsorizing Outliers | Fitting XGBoost, LightGBM, RF, LogReg, PyTorch ANN, 1D-CNN, BiLSTM &amp; TreeSHAP</p>
+    <h3 id="loadingTitle">Loading dataset and model metrics...</h3>
+    <p id="loadingSubtitle">Preparing telemetry controls, evaluation metrics, and feature attributions</p>
   </div>
 
   <script src="precomputed_states.js"></script>
